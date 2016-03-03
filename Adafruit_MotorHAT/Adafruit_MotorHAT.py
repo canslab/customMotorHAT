@@ -178,7 +178,7 @@ class Adafruit_MotorHAT:
 		else:
 			return self.leds[num]
 
-	def getServos(self, num):
+	def getServoMotor(self, num):
 		if (num < 0) or (num >= 2):
 			raise NameError('MotorHAT Servos must be between 0 and 1 inclusive')
 		else:
