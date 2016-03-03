@@ -15,18 +15,12 @@ class Adafruit_DCMotor:
 		self.motornum = num
                 pwm = in1 = in2 = 0
 
-                if (num == 0):		# Servo Motor 1
-                         pwm = 0
-                        
-                elif (num == 1):	# Servo Motor 2
-                         pwm = 1
-
-                elif (num == 2):
+                if (num == 0):
                          pwm = 2
                          in2 = 3
                          in1 = 4
 
-                elif (num == 3):
+                elif (num == 1):
                          pwm = 7
                          in2 = 6
                          in1 = 5
@@ -34,7 +28,7 @@ class Adafruit_DCMotor:
 			raise NameError('MotorHAT Motor must be between 1 and 4 inclusive')
                 self.PWMpin = pwm
                 
-                if (num >= 2):
+                if (num < 2):
 	                self.IN1pin = in1
                 	self.IN2pin = in2
 
@@ -57,8 +51,44 @@ class Adafruit_DCMotor:
 			speed = 255
 		self.MC._pwm.setPWM(self.PWMpin, 0, speed*16)
 
-##########################
+#######################################
 ###############################
+##########################
+###############################		For 2 servo motors 
+######################
+#########################
+#######################################
+
+class Jangho_Servo:
+
+	def __init__(self, controller, num):
+		self.MC = controller
+		self.motornum = num
+                pwm = in1 = in2 = 0
+
+                if (num == 0):		# Servo Motor 1
+                         pwm = 0
+                        
+                elif (num == 1):	# Servo Motor 2
+                         pwm = 1
+
+		else:
+			raise NameError('MotorHAT Motor must be between 1 and 4 inclusive')
+                self.PWMpin = pwm
+
+	def setDutyCycle(self, highLength):
+		if (highLength < 0):
+			highLength = 0
+		if (highLength > 4095):
+			highLength = 4095
+		self.MC._pwm.setPWM(self.PWMpin, 0, highLength)
+
+#######################################
+###############################
+##########################
+###############################		For 2 LEDs
+######################
+#########################
 #######################################
 
 class Jangho_LED:
@@ -106,6 +136,8 @@ class Jangho_LED:
 		self.mPwmController._pwm.setPWM(self.PWMpin, 0, brightness * 16)
 
 ###############################################################
+###############################################################
+###############################################################
 
 class Adafruit_MotorHAT:
 	FORWARD = 1
@@ -119,9 +151,12 @@ class Adafruit_MotorHAT:
 	def __init__(self, addr = 0x60, freq = 1600):
 		self._i2caddr = addr            # default addr on HAT
 		self._frequency = freq		# default @1600Hz PWM freq
-		self.motors = [ Adafruit_DCMotor(self, m) for m in range(4) ]	# modified, becausee of 2 LEDs
+		self.motors = [ Adafruit_DCMotor(self, m) for m in range(2) ]	# modified, becausee of 2 LEDs
 		
-		# my own LED allocation
+		# for my own two servo motors
+		self.servoMotors = [ Jangho_Servo(self, m) for m in range(2) ]
+		
+		# for my own two LEDs
 		self.leds = [ Jangho_LED(self, m) for m in range(2) ]
 
 		self._pwm =  PWM(addr, debug=False)
@@ -138,12 +173,18 @@ class Adafruit_MotorHAT:
 			self._pwm.setPWM(pin, 4096, 0)
 
 	def getLED(self, num):
-		if (num < 1) or (num > 2):
-			raise NameError('MotorHAT LED must be between 1 and 2 inclusive')
+		if (num < 0) or (num >= 2):
+			raise NameError('MotorHAT LED must be between 0 and 1 inclusive')
 		else:
-			return self.leds[num - 1]
+			return self.leds[num]
 
-	def getMotor(self, num):
-		if (num < 1) or (num > 6):
-			raise NameError('MotorHAT Motor must be between 1 and 4 inclusive')
-		return self.motors[num-1]
+	def getServos(self, num):
+		if (num < 0) or (num >= 2):
+			raise NameError('MotorHAT Servos must be between 0 and 1 inclusive')
+		else:
+			return self.servoMotors[num]		
+
+	def getDCMotor(self, num):
+		if (num < 0) or (num >= 2):
+			raise NameError('MotorHAT Motor must be between 0 and 1 inclusive')
+		return self.motors[num]

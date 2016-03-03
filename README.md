@@ -1,13 +1,13 @@
-Adafruit Python Library for DC + Stepper Motor HAT
+Customized Adafruit HAT python library 
 =======================
 
-Python library for interfacing with the Adafruit Motor HAT for Raspberry Pi to control DC motors with speed control and Stepper motors with single, double, interleave and microstepping.
+To support peripherals of the RPi tank.
 
-Designed specifically to work with the Adafruit Motor Hat
+2 LEDs, 2 Servo Motors..
 
-----> https://www.adafruit.com/product/2348
+[ 2 Important classes ]
 
-Adafruit invests time and resources providing this open source code, please support Adafruit and open-source hardware by purchasing products from Adafruit!
+1. Jangho_LED   => It is an LED object. ( LED is emitted by using PWM )
+2. Adafruit_DCMotor => It is an DC Motor or servo motor Object. ( 0, 1 ==> servo // 2, 3 ==> DC)
+3. Adafruit_MotorHAT => Manager.
 
-Written by Limor Fried for Adafruit Industries.
-MIT license, all text above must be included in any redistribution
