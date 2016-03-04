@@ -3,7 +3,7 @@ Customized Adafruit HAT python library
 
 To support peripherals of the RPi tank.
 
-2 LEDs, 2 Servo Motors..
+2 LEDs, 2 Servo Motors, 2 DC Motors
 
 
 
